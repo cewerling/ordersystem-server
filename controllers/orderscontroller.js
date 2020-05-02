@@ -29,6 +29,24 @@ router.get('/', validateSession, (req, res) => {
 
 
 
+/****************************************
+* GET An Order by ID
+****************************************/
+
+router.get('/:id', validateSession, (req, res) => {
+
+    OrderHeader.findAll({
+        where: {
+            id: req.params.id
+        }
+    })
+      .then(log => res.status(200).json(log))
+      .catch(err => res.status(500).json({error:err}))
+
+});
+
+
+
 
 /****************************************
 * CREATE Order
@@ -49,7 +67,7 @@ router.post('/', validateSession, (req, res) => {
         "postalCode": req.body.order.postalCode,
         "orderStatus": req.body.order.orderStatus,
         "costSubtotal": req.body.order.costSubtotal,
-        "userid": req.user.salesUserID
+        "userId": req.user.salesUserID
     }
 
     console.log('******** Order to Create: ********');
@@ -73,7 +91,6 @@ router.put('/:id', validateSession, (req, res) => {
     const orderFromRequest = {
         "customerName": req.body.order.customerName,
         "orderNumber": req.body.order.orderNumber,
-        "orderPlacedDateTime": req.body.order.orderPlacedDateTime,
         "mobilePhone": req.body.order.mobilePhone,
         "email": req.body.order.email,
         "hostName": req.body.order.hostName,
@@ -85,7 +102,10 @@ router.put('/:id', validateSession, (req, res) => {
         "costSubtotal": req.body.order.costSubtotal,
     }
 
-    OrderHeader.update(orderFromRequest, {where: {userId: req.user.salesUserID, id: req.params.id}})
+    console.log('******** orderFromRequest = *********');
+    console.log(orderFromRequest);
+
+    OrderHeader.update(orderFromRequest, {where: {id: req.params.id}})
       .then(log => {res.status(200).json(log);})
       .catch(err => res.json(req.errors))
 
