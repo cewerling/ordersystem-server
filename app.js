@@ -23,6 +23,8 @@ app.use(require('./middleware/validate-session'));
 app.use('/orders', orders);
 
 
-app.listen(3000, function() {                      // Get rid of function later?
-    console.log('App is listening on 3000.');
+// app.listen(3000, function() {
+app.listen(process.env.PORT, function() {
+        console.log(`Server is listening on port ${process.env.PORT}.`);
+        // console.log('App is listening on 3000.');
 });
