@@ -1,6 +1,6 @@
 require('dotenv').config();      // Includes the .env file for reference in this file
 var router = require('express').Router();
-var sequelize = require('../Db');
+var sequelize = require('./db');
 var OrderHeader = sequelize.import('../models/orderHeader');
 const validateSession = require('../middleware/validate-session');
 
