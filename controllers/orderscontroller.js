@@ -16,10 +16,12 @@ var jwt = require('jsonwebtoken');
 router.get('/', validateSession, (req, res) => {
 
     console.log('*************Getting the orders.************');
-    console.log('')
+    console.log('req.user.id =  ' + req.user.id);
+    console.log('');
     
     OrderHeader.findAll({
-        where: {userId: req.user.salesUserID}
+        where: {userId: req.user.id}
+        // where: {userId: req.user.salesUserID}
         // where: {owner: req.body.owner}
     })
       .then(orders => res.status(200).json(orders))
@@ -67,7 +69,8 @@ router.post('/', validateSession, (req, res) => {
         "postalCode": req.body.order.postalCode,
         "orderStatus": req.body.order.orderStatus,
         "costSubtotal": req.body.order.costSubtotal,
-        "userId": req.user.salesUserID
+        "userId": req.user.id
+        // "userId": req.user.salesUserID
     }
 
     console.log('******** Order to Create: ********');
@@ -100,6 +103,7 @@ router.put('/:id', validateSession, (req, res) => {
         "postalCode": req.body.order.postalCode,
         "orderStatus": req.body.order.orderStatus,
         "costSubtotal": req.body.order.costSubtotal,
+        "updatedBy": req.user.id
     }
 
     console.log('******** orderFromRequest = *********');
@@ -120,7 +124,8 @@ router.put('/:id', validateSession, (req, res) => {
 
 router.delete('/:id', validateSession, (req, res) => {
 
-    OrderHeader.destroy({where: {userId: req.user.salesUserID, id: req.params.id}})
+    // OrderHeader.destroy({where: {userId: req.user.salesUserID, id: req.params.id}})
+    OrderHeader.destroy({where: {id: req.params.id}})
       .then(log => {res.status(200).json(log);})
       .catch(err => res.json(req.errors))
 
